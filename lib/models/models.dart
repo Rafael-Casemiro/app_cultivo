@@ -5,13 +5,14 @@ class Category {
     this.imageUrl,
     required this.id,
     required this.name,
-    required this.sci_name,
+    required this.sciname,
     required this.climate,
     required this.soil,
     required this.season,
     required this.description,
-    this.color = Colors.orange});
-    
+    required this.instructions
+   });
+   
   final String? imageUrl;
   final String id;
   final String name;
@@ -20,5 +21,5 @@ class Category {
   final String soil;
   final String season;
   final String description;
-  final Color color;
+  final String instructions;
 }
