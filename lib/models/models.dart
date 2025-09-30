@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Category {
-  const Category({
+class Plant {
+  const Plant({
     this.imageUrl,
     required this.id,
     required this.name,
