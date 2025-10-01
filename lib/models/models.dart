@@ -2,7 +2,7 @@
 
 class Plant {
   const Plant({
-    this.imageUrl,
+    this.imagePath,
     required this.id,
     required this.name,
     required this.sciname,
@@ -13,7 +13,7 @@ class Plant {
     required this.instructions
    });
    
-  final String? imageUrl;
+  final String? imagePath;
   final String id;
   final String name;
   final String sciname;

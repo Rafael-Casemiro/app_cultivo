@@ -27,12 +27,12 @@ class _TabsScreenState extends State<TabsScreen> {
       setState(() {
         _favotitePlants.remove(plant);
       });
-      _showInfoMessage('Plant removed from favorites.');
+      _showInfoMessage('Planta removida dos favoritos.');
     } else {
       setState(() {
         _favotitePlants.add(plant);
       });
-      _showInfoMessage('Plant added to favorites');
+      _showInfoMessage('Planta adicionada aos favoritos');
     }
   }
 
@@ -46,12 +46,7 @@ class _TabsScreenState extends State<TabsScreen> {
   Widget build(BuildContext context) {
     Widget activePage = Plants(plants: _selectedPageIndex == 0 ? availablePlants : _favotitePlants, onToggleFavorite: _toglePlantFavoriteStatus);
 
-    String activePageTitle = _selectedPageIndex == 0 ? 'Início' : 'Favoritos';
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text(activePageTitle),
-      ),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,

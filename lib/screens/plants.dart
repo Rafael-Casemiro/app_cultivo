@@ -31,17 +31,18 @@ class Plants extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'Nothing to show!',
+            'Nada para mostrar!',
             style: Theme.of(context).textTheme.headlineLarge!.copyWith(
               color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           const SizedBox(height: 16),
           Text(
-            'Try adding some plants to your favorites.',
+            'Tente adicionar algumas plantas para os seus favoritos.',
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
               color: Theme.of(context).colorScheme.onSurface,
             ),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
