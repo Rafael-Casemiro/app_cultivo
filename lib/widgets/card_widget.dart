@@ -6,10 +6,12 @@ class CardWidget extends StatelessWidget {
     super.key,
     required this.color,
     required this.plant,
+    required this.onToggleFavorite,
   });
 
   final Color color;
   final Plant plant;
+  final void Function() onToggleFavorite;
 
   @override
   Widget build(BuildContext context) {
