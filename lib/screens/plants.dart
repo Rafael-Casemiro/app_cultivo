@@ -15,14 +15,11 @@ class Plants extends StatelessWidget {
         centerTitle: true,
         title: Text(KTexts.tituloApp),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            for (final plant in availablePlants)
-              CardWidget(color: Theme.of(context).colorScheme.secondaryContainer, plant: plant),
-          ],
-        ),
+      body: ListView(
+        children: [
+          for (final plant in availablePlants)
+            CardWidget(color: Theme.of(context).colorScheme.secondaryContainer, plant: plant),
+        ],
       ),
       bottomNavigationBar: NavbarWidget(),
     );
