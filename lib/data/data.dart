@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:app_cultivo/models/models.dart';
 
 class KTexts {

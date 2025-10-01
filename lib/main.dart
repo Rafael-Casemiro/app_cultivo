@@ -1,4 +1,4 @@
-import 'package:app_cultivo/screens/plants.dart';
+import 'package:app_cultivo/screens/tabs.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
       ),
-      home: Plants(),
+      home: TabsScreen(),
     );
   }
 }

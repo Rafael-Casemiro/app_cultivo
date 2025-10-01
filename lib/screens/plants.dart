@@ -1,27 +1,73 @@
-import 'package:app_cultivo/data/data.dart';
+import 'package:app_cultivo/models/models.dart';
 import 'package:app_cultivo/widgets/card_widget.dart';
-import 'package:app_cultivo/widgets/navbar_widget.dart';
 import 'package:flutter/material.dart';
+import 'plants_details.dart';
 
 class Plants extends StatelessWidget {
-  const Plants({super.key});
+  const Plants({
+    super.key,
+    required this.plants,
+    required this.onToggleFavorite,
+  });
+
+  final List<Plant> plants;
+  final void Function(Plant plant) onToggleFavorite;
+
+  void _selectPlant(BuildContext context, Plant plant) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) => PlantsDetailsScreen(
+          plant: plant,
+          onToggleFavorite: onToggleFavorite,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    
+    Widget content = Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Nothing to show!',
+            style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Try adding some plants to your favorites.',
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (plants.isNotEmpty) {
+      content = ListView.builder(
+        itemCount: plants.length,
+        itemBuilder: (ctx, index) => GestureDetector(
+          onTap: () => _selectPlant(context, plants[index]),
+          child: CardWidget(
+            color: Theme.of(context).colorScheme.secondaryContainer,
+            plant: plants[index],
+            onToggleFavorite: () => onToggleFavorite(plants[index]),
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         centerTitle: true,
-        title: Text(KTexts.tituloApp),
+        title: Text('Plants'),
       ),
-      body: ListView(
-        children: [
-          for (final plant in availablePlants)
-            CardWidget(color: Theme.of(context).colorScheme.secondaryContainer, plant: plant),
-        ],
-      ),
-      bottomNavigationBar: NavbarWidget(),
+      body: content,
     );
   }
 }
