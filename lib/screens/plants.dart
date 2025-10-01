@@ -15,6 +15,45 @@ class Plants extends StatelessWidget {
         centerTitle: true,
         title: Text(KTexts.tituloApp),
       ),
+
+      endDrawer: Drawer(
+        child: Container(
+          color: Color(0xffb3d38d),
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              const DrawerHeader(
+                decoration: BoxDecoration(color: Color(0xFF8aae5c)),
+                child: Text(
+                  'Componentes:',
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xff394834),
+                    fontFamily: 'Roboto',
+                  ),
+                ),
+              ),
+              ...availableStudent.map((student) => ListTile(
+                leading: Icon(Icons.person, color: Color(0xff394834),),
+                title: Text(
+                  student.nome,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Color(0xff394834),
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
+                onTap: () {
+
+                },
+              ))
+            ],
+          ),
+        ),
+      ),
+
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
