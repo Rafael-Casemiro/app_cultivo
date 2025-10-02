@@ -1,4 +1,5 @@
 import 'package:app_cultivo/data/data.dart';
+import 'package:app_cultivo/providers/favorites_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_cultivo/models/models.dart';
@@ -15,6 +16,9 @@ class PlantsDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final favoritesPlants = ref.watch(favoritePlantsProvider);
+    final isFavorite = favoritesPlants.contains(plant);
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBar: AppBar(
@@ -23,7 +27,10 @@ class PlantsDetailsScreen extends ConsumerWidget {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.star),
+            icon: Icon(
+              Icons.star,
+              color: isFavorite ? Colors.yellow : Colors.black,
+            ),
             onPressed: () {
               onToggleFavorite(plant);
             },

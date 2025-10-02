@@ -1,39 +1,23 @@
-import 'package:app_cultivo/models/models.dart';
-import 'package:app_cultivo/screens/plants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_cultivo/data/data.dart';
+import 'package:app_cultivo/screens/plants.dart';
+import 'package:app_cultivo/providers/favorites_providers.dart';
+import 'package:app_cultivo/widgets/home_drawer.dart';
 
-class TabsScreen extends StatefulWidget {
+class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
 
   @override
-  State<TabsScreen> createState() => _TabsScreenState();
+  ConsumerState<TabsScreen> createState() => _TabsScreenState();
 }
 
-class _TabsScreenState extends State<TabsScreen> {
+class _TabsScreenState extends ConsumerState<TabsScreen> {
   int _selectedPageIndex = 0;
-  final List<Plant> _favotitePlants = [];
 
   void _showInfoMessage(String message) {
     ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message)));
-  }
-
-  void _toglePlantFavoriteStatus(Plant plant) {
-    final isExisting = _favotitePlants.contains(plant);
-    if (isExisting) {
-      setState(() {
-        _favotitePlants.remove(plant);
-      });
-      _showInfoMessage('Planta removida dos favoritos.');
-    } else {
-      setState(() {
-        _favotitePlants.add(plant);
-      });
-      _showInfoMessage('Planta adicionada aos favoritos');
-    }
+    ScaffoldMessenger.of(context,).showSnackBar(SnackBar(content: Text(message)));
   }
 
   void _selectPage(int index) {
@@ -44,9 +28,24 @@ class _TabsScreenState extends State<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Widget activePage = Plants(plants: _selectedPageIndex == 0 ? availablePlants : _favotitePlants, onToggleFavorite: _toglePlantFavoriteStatus);
+    final favoritePlants = ref.watch(favoritePlantsProvider);
+
+    Widget activePage = Plants(
+      plants: _selectedPageIndex == 0 ? availablePlants : favoritePlants, 
+      onToggleFavorite: (plant) {
+        ref.read(favoritePlantsProvider.notifier).togglePlantFavoriteStatus(plant);
+        final becameFavorite = ref.read(favoritePlantsProvider).contains(plant);
+        _showInfoMessage(becameFavorite? "Planta Adicionada" : "Planta Removida");
+      }
+    );
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Plants"),
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        centerTitle: true,
+      ),
+      drawer: const HomeDrawer(),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
