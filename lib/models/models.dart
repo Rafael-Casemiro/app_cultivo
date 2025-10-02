@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+
 
 class Plant {
   const Plant({
-    this.imageUrl,
+    this.imagePath,
     required this.id,
     required this.name,
     required this.sciname,
@@ -10,10 +10,11 @@ class Plant {
     required this.soil,
     required this.season,
     required this.description,
-    required this.instructions
+    required this.instructions,
+    required this.isFavorite
    });
    
-  final String? imageUrl;
+  final String? imagePath;
   final String id;
   final String name;
   final String sciname;
@@ -22,4 +23,5 @@ class Plant {
   final String season;
   final String description;
   final String instructions;
+  final bool isFavorite;
 }
