@@ -16,7 +16,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xffb3d38d)),
+        scaffoldBackgroundColor: Color(0xffb3d38d),
       ),
       home: TabsScreen(),
     );

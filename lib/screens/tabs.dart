@@ -41,8 +41,8 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Plants"),
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        title: Text("Plantas"),
+        backgroundColor: Theme.of(context).colorScheme.primary,
         centerTitle: true,
       ),
       drawer: const HomeDrawer(),
