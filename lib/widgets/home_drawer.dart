@@ -9,7 +9,7 @@ class HomeDrawer extends StatelessWidget{
     return Drawer(
         width: 280,
         child: Container(
-          color: Color(0xffb3d38d),
+          color: Theme.of(context).colorScheme.secondaryContainer,
           child: ListView(
             padding: EdgeInsets.zero,
             children: [

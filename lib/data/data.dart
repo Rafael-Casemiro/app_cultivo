@@ -11,7 +11,7 @@ class KTextStyles{
     fontWeight: FontWeight.bold,
   );
   static const TextStyle sciDesc = TextStyle(
-    fontSize: 14,
+    fontSize: 18,
     fontStyle: FontStyle.italic,
   );
   static const TextStyle textDetails = TextStyle(
@@ -21,8 +21,19 @@ class KTextStyles{
   );
   static const TextStyle subTextDetails = TextStyle(
     color: Colors.black,
-    fontSize: 20,
+    fontSize: 18,
+    fontWeight: FontWeight.normal,
+  );
+  static const TextStyle nomeDetails = TextStyle(
+    fontSize: 24,
     fontWeight: FontWeight.bold,
+  );
+  static const TextStyle sciDetails = TextStyle(
+    fontSize: 18,
+    fontStyle: FontStyle.italic,
+  );
+  static const TextStyle seasonDetails = TextStyle(
+    fontSize: 18
   );
 }
 
@@ -33,7 +44,7 @@ const availablePlants = [
     sciname: 'Solanum lycopersicum',
     climate: 'Tropical a subtropical',
     soil: 'Bem drenado, rico em matéria orgânica',
-    season: 'Primavera e verão',
+    season: 'Primavera e Verão',
     description: 'O tomate é uma planta herbácea cultivada amplamente no Brasil, utilizada em saladas, molhos e diversos pratos. Requer boa luminosidade, irrigação regular e solo fértil.',
     imagePath: 'assets/images/tomate.jpg',
     instructions: 'Plantar em local ensolarado, irrigar regularmente e adubar com composto orgânico.',
@@ -45,7 +56,7 @@ const availablePlants = [
     sciname: 'Zea mays',
     climate: 'Tropical e subtropical',
     soil: 'Profundo, bem drenado, rico em nutrientes',
-    season: 'Outono e primavera',
+    season: 'Outono e Primavera',
     description: 'O milho é uma das principais culturas agrícolas do Brasil, utilizado na alimentação humana, animal e na indústria.',
     imagePath: 'assets/images/milho.jpg',
     instructions: 'Semear em linhas espaçadas, irrigar moderadamente e controlar pragas.',
@@ -57,7 +68,7 @@ const availablePlants = [
     sciname: 'Glycine max',
     climate: 'Subtropical a temperado',
     soil: 'Bem drenado, fértil, pH entre 6 e 7',
-    season: 'Outono e primavera',
+    season: 'Outono e Primavera',
     description: 'A soja é uma das culturas mais importantes do Brasil, usada na produção de óleo, ração animal e alimentos.',
     imagePath: 'assets/images/soja.jpg',
     instructions: 'Plantar em solo corrigido, irrigar conforme necessidade e realizar rotação de culturas.',
@@ -69,7 +80,7 @@ const availablePlants = [
     sciname: 'Saccharum officinarum',
     climate: 'Tropical',
     soil: 'Profundo, bem drenado, rico em matéria orgânica',
-    season: 'Primavera e verão',
+    season: 'Primavera e Verão',
     description: 'Utilizada na produção de açúcar, etanol e cachaça, a cana-de-açúcar é uma cultura de grande importância econômica no Brasil.',
     imagePath: 'assets/images/cana_acucar.jpg',
     instructions: 'Plantar em sulcos profundos, irrigar bem e aplicar fertilizantes orgânicos.',
@@ -81,7 +92,7 @@ const availablePlants = [
     sciname: 'Coffea arabica',
     climate: 'Tropical com altitude',
     soil: 'Bem drenado, rico em matéria orgânica',
-    season: 'Outono e inverno',
+    season: 'Outono e Inverno',
     description: 'O Brasil é o maior produtor mundial de café. A planta exige clima ameno, altitude e cuidados com irrigação e poda.',
     imagePath: 'assets/images/cafe.jpg',
     instructions: 'Cultivar em áreas elevadas, podar regularmente e irrigar com moderação.',
@@ -93,7 +104,7 @@ const availablePlants = [
     sciname: 'Phaseolus vulgaris',
     climate: 'Tropical a subtropical',
     soil: 'Leve, bem drenado, fértil',
-    season: 'Primavera e verão',
+    season: 'Primavera e Verão',
     description: 'Presente na base alimentar brasileira, o feijão é cultivado em diversas regiões e exige solo fértil e irrigação moderada.',
     imagePath: 'assets/images/feijao.jpg',
     instructions: 'Semear em covas rasas, irrigar regularmente e evitar encharcamento.',
@@ -129,7 +140,7 @@ const availablePlants = [
     sciname: 'Gossypium hirsutum',
     climate: 'Semiárido a tropical',
     soil: 'Bem drenado, fértil',
-    season: 'Primavera e verão',
+    season: 'Primavera e Verão',
     description: 'O algodão é usado na indústria têxtil e exige clima quente e seco, além de solo fértil e controle de pragas.',
     imagePath: 'assets/images/algodao.jpg',
     instructions: 'Semear em solo fértil, aplicar defensivos agrícolas e colher após 150 dias.',
