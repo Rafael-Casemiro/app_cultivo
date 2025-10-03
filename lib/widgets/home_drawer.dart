@@ -9,12 +9,12 @@ class HomeDrawer extends StatelessWidget{
     return Drawer(
         width: 280,
         child: Container(
-          color: Theme.of(context).colorScheme.secondaryContainer,
+          color: Color(0xffb3d38d),
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
-              DrawerHeader(
-                decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary),
+              const DrawerHeader(
+                decoration: BoxDecoration(color: Color(0xFF8aae5c)),
                 padding: EdgeInsets.all(28.0),
                 child: Text(
                   'Componentes',

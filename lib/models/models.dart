@@ -10,7 +10,8 @@ class Plant {
     required this.soil,
     required this.season,
     required this.description,
-    required this.instructions
+    required this.instructions,
+    required this.isFavorite
    });
    
   final String? imagePath;
@@ -22,4 +23,5 @@ class Plant {
   final String season;
   final String description;
   final String instructions;
+  final bool isFavorite;
 }

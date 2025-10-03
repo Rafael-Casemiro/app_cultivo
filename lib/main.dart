@@ -1,13 +1,11 @@
-import 'package:app_cultivo/screens/tabs.dart';
-<<<<<<< Updated upstream
 import 'package:flutter/material.dart';
-=======
-import 'package:flutter_launcher_icons/xml_templates.dart';
+import 'package:app_cultivo/screens/tabs.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
->>>>>>> Stashed changes
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    const ProviderScope(child: MyApp())
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -18,8 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xffb3d38d)),
-        scaffoldBackgroundColor: Color(0xffb3d38d),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
       ),
       home: TabsScreen(),
     );

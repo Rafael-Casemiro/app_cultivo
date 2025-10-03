@@ -62,13 +62,6 @@ class Plants extends StatelessWidget {
       );
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        centerTitle: true,
-        title: Text('Plants'),
-      ),
-      body: content,
-    );
+    return content;
   }
 }
