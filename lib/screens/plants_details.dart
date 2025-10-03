@@ -18,12 +18,18 @@ class PlantsDetailsScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text(plant.name),
         centerTitle: true,
         actions: [
           IconButton(
+<<<<<<< Updated upstream
             icon: Icon(Icons.star),
+=======
+            icon: Icon(
+              isFavorite ? Icons.star : Icons.star_border
+            ),
+>>>>>>> Stashed changes
             onPressed: () {
               onToggleFavorite(plant);
             },
@@ -32,12 +38,35 @@ class PlantsDetailsScreen extends ConsumerWidget {
       ),
       body: ListView(
         children: [
-          Image.asset(
-            plant.imagePath!,
-            height: 300,
-            width: double.infinity,
-            fit: BoxFit.cover,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20.0),
+                  child: Image.asset(
+                    plant.imagePath!,
+                    height: 170,
+                    width: 170,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(plant.name, style: KTextStyles.nomeDetails),
+                    Text(plant.sciname, style: KTextStyles.sciDetails),
+                    Text(plant.season, style: KTextStyles.seasonDetails),
+                  ],
+                ),
+              )
+            ],
           ),
+          Divider(thickness: 6.5, color: Color(0xffb3d38d),),
           Padding(
             padding: const EdgeInsets.all(14.0),
             child: Column(

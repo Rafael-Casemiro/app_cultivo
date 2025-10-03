@@ -47,6 +47,16 @@ class _TabsScreenState extends State<TabsScreen> {
     Widget activePage = Plants(plants: _selectedPageIndex == 0 ? availablePlants : _favotitePlants, onToggleFavorite: _toglePlantFavoriteStatus);
 
     return Scaffold(
+<<<<<<< Updated upstream
+=======
+      appBar: AppBar(
+        title: Text("Plantas"),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        centerTitle: true,
+      ),
+      
+      drawer: const HomeDrawer(),
+>>>>>>> Stashed changes
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
