@@ -7,11 +7,13 @@ class Plants extends StatelessWidget {
   const Plants({
     super.key,
     required this.plants,
-    required this.onToggleFavorite,
+    required this.onToggleFavorite, 
+    required this.ativarGridView,
   });
 
   final List<Plant> plants;
   final void Function(Plant plant) onToggleFavorite;
+  final bool ativarGridView;
 
   void _selectPlant(BuildContext context, Plant plant) {
     Navigator.of(context).push(
@@ -49,17 +51,26 @@ class Plants extends StatelessWidget {
     );
 
     if (plants.isNotEmpty) {
-      content = ListView.builder(
-        itemCount: plants.length,
-        itemBuilder: (ctx, index) => GestureDetector(
-          onTap: () => _selectPlant(context, plants[index]),
-          child: CardWidget(
-            color: Theme.of(context).colorScheme.secondaryContainer,
-            plant: plants[index],
-            onToggleFavorite: () => onToggleFavorite(plants[index]),
+      if (ativarGridView == false) {
+        // Carrega o ListView como padrão
+        content = ListView.builder(
+          itemCount: plants.length,
+          itemBuilder: (ctx, index) => GestureDetector(
+            onTap: () => _selectPlant(context, plants[index]),
+            child: CardWidget(
+              color: Theme.of(context).colorScheme.secondaryContainer,
+              plant: plants[index],
+              onToggleFavorite: () => onToggleFavorite(plants[index]),
+            ),
           ),
-        ),
-      );
+        );
+      } else {
+        content = CardWidgetGrid(
+          color: Theme.of(context).colorScheme.secondaryContainer,
+          plants: plants,
+          onSelectPlant: (plant) => _selectPlant(context, plant)
+        );
+      }
     }
 
     return content;
