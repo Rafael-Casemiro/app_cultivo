@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_cultivo/data/data.dart';
 import 'package:app_cultivo/screens/plants.dart';
 import 'package:app_cultivo/providers/favorites_providers.dart';
+import 'package:app_cultivo/providers/display_mode_provider.dart';
 import 'package:app_cultivo/widgets/home_drawer.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
@@ -29,6 +30,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     final favoritePlants = ref.watch(favoritePlantsProvider);
+    final ativarGridView = ref.watch(displayModeProvider);
 
     Widget activePage = Plants(
       plants: _selectedPageIndex == 0 ? availablePlants : favoritePlants, 
@@ -36,7 +38,8 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
         ref.read(favoritePlantsProvider.notifier).togglePlantFavoriteStatus(plant);
         final becameFavorite = ref.read(favoritePlantsProvider).contains(plant);
         _showInfoMessage(becameFavorite? "Planta Adicionada" : "Planta Removida");
-      }
+      },
+      ativarGridView: ativarGridView,
     );
 
     return Scaffold(
@@ -44,6 +47,15 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
         title: Text("Plantas"),
         backgroundColor: Theme.of(context).colorScheme.primary,
         centerTitle: true,
+        // Botão de alternância de modo de visualização
+        actions: [
+          IconButton(
+            icon: Icon(ativarGridView ? Icons.view_list : Icons.grid_view),
+            onPressed: () {
+              ref.read(displayModeProvider.notifier).toggleDisplayMode();
+            }
+          )
+        ],
       ),
       drawer: const HomeDrawer(),
       body: activePage,
