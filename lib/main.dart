@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:app_cultivo/screens/tabs.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:app_cultivo/screens/login_page.dart';
 
 void main() {
   runApp(
@@ -19,7 +20,11 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Color(0xffb3d38d)),
         scaffoldBackgroundColor: Color(0xffb3d38d),
       ),
-      home: TabsScreen(),
+      routes: {
+        '/': (context) => const TabsScreen(),
+        '/login': (context) => const LoginPage(),
+      },
+      initialRoute: '/',
     );
   }
 }
