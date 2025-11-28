@@ -1,3 +1,4 @@
+// Modelo de dados para os estudantes do grupo
 class Student {
   const Student({
     required this.id,
