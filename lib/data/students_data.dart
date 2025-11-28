@@ -1,3 +1,4 @@
+// Arquivo para armazenar os dados do grupo
 import 'package:app_cultivo/models/students.dart';
 final List<Student> availableStudent = [
   Student(id: 'a1', nome:'Joao Gabriel Miranda Loiola Araujo'),

@@ -1,42 +1,59 @@
+// Arquivo para armazenar dados mocados
 import 'package:flutter/material.dart';
 import 'package:app_cultivo/models/models.dart';
 
+// Classe Utilitária para o titulo do app
 class KTexts {
   static const String tituloApp = "Título Provisório";
 }
 
+// Classe Utilitária para os estilos de texto
 class KTextStyles{
+  // Estilo para títulos dos cards
   static const TextStyle tituloCard = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.bold,
   );
+
+  // Estilo para descrições científicas ou textos secundários nos cards
   static const TextStyle sciDesc = TextStyle(
     fontSize: 18,
     fontStyle: FontStyle.italic,
   );
+
+  // Estilo destacado (verde) para informações cruciais na tela de detalhes
   static const TextStyle textDetails = TextStyle(
     color: Colors.green,
     fontSize: 24,
     fontWeight: FontWeight.bold,
   );
+
+  // Estilo para o corpo do texto na tela de detalhes
   static const TextStyle subTextDetails = TextStyle(
     color: Colors.black,
     fontSize: 18,
     fontWeight: FontWeight.normal,
   );
+
+  // Estilo para o nome principal da planta na tela de detalhes
   static const TextStyle nomeDetails = TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.bold,
   );
+
+  // Estilo itálico para o nome científico na tela de detalhes
   static const TextStyle sciDetails = TextStyle(
     fontSize: 18,
     fontStyle: FontStyle.italic,
   );
+
+  // Estilo para informações de sazonalidade
   static const TextStyle seasonDetails = TextStyle(
     fontSize: 18
   );
 }
 
+// Funciona como um "Mock Data" (Banco de dados fictício) para popular a interface
 const availablePlants = [
   Plant(
     id: 'p1',

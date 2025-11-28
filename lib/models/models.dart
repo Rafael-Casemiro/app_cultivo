@@ -1,5 +1,4 @@
-
-
+// Modelo de dados para as plantas
 class Plant {
   const Plant({
     this.imagePath,
