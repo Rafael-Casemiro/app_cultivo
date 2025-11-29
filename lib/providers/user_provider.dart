@@ -1,4 +1,37 @@
+import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app_cultivo/models/user_profile.dart';
 
-final userProfileProvider = StateProvider<UserProfile?>((ref) => null);
+class UserProfileNotifier extends StateNotifier<UserProfile?> {
+  UserProfileNotifier() : super(null) {
+    _loadUserProfile();
+  }
+
+  Future<void> _loadUserProfile() async {
+    final prefs = await SharedPreferences.getInstance();
+    final name = prefs.getString('user_name');
+    final photo = prefs.getString('user_photo');
+    if (name != null && photo != null) {
+      state = UserProfile(name: name, photoPath: photo);
+    }
+  }
+
+  Future<void> saveUserProfile(UserProfile profile) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('user_name', profile.name);
+    await prefs.setString('user_photo', profile.photoPath);
+    state = profile;
+  }
+
+  Future<void> clearUserProfile() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('user_name');
+    await prefs.remove('user_photo');
+    state = null;
+  }
+}
+
+final userProfileProvider =
+StateNotifierProvider<UserProfileNotifier, UserProfile?>(
+        (ref) => UserProfileNotifier());

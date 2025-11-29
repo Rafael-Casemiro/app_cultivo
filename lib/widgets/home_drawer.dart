@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:app_cultivo/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:app_cultivo/data/students_data.dart';
@@ -5,6 +6,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HomeDrawer extends ConsumerWidget {
   const HomeDrawer({super.key});
+
+  ImageProvider getImageProvider(userProfile) {
+    if (userProfile == null) {
+      return const AssetImage('assets/images/Icone1.png');
+    }
+    return userProfile.photoPath.startsWith('assets/')
+        ? AssetImage(userProfile.photoPath)
+        : FileImage(File(userProfile.photoPath));
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,9 +34,7 @@ class HomeDrawer extends ConsumerWidget {
                   children: [
                     CircleAvatar(
                       radius: 40,
-                      backgroundImage: userProfile == null
-                          ? const AssetImage('assets/images/Icone1.png')
-                          : AssetImage(userProfile.photoPath),
+                      backgroundImage: getImageProvider(userProfile),
                     ),
                     const SizedBox(height: 12),
                     Text(
@@ -36,7 +44,7 @@ class HomeDrawer extends ConsumerWidget {
                         fontWeight: FontWeight.bold,
                         color: Color(0xff394834),
                       ),
-                      textAlign: TextAlign.center, // centraliza dentro da largura toda
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),

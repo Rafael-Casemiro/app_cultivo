@@ -42,17 +42,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           key: _formKey,
           child: Column(
             children: [
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: "Nome",
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) =>
-                value == null || value.isEmpty ? "Informe seu nome" : null,
-              ),
-              const SizedBox(height: 16),
-
               CircleAvatar(
                 radius: 40,
                 backgroundImage: _photoPath != null
@@ -65,6 +54,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 onPressed: _pickImage
               ),
 
+              TextFormField(
+                controller: _nameController,
+                decoration: const InputDecoration(
+                  labelText: "Nome",
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) =>
+                value == null || value.isEmpty ? "Informe seu nome" : null,
+              ),
+              const SizedBox(height: 16),
+
               const SizedBox(height: 24),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -73,9 +73,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 ),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    ref.read(userProfileProvider.notifier).state = UserProfile(
-                      name: _nameController.text,
-                      photoPath: _photoPath ?? 'assets/images/default_avatar.png',
+                    ref.read(userProfileProvider.notifier).saveUserProfile(
+                      UserProfile(
+                        name: _nameController.text,
+                        photoPath: _photoPath ?? 'assets/images/default_avatar.png',
+                      ),
                     );
                     Navigator.pop(context);
                   }
