@@ -15,6 +15,7 @@ class LoginPage extends ConsumerStatefulWidget {
 class _LoginPageState extends ConsumerState<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
 
   String? _photoPath;
 
@@ -27,6 +28,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         _photoPath = pickedFile.path;
       });
     }
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    super.dispose();
   }
 
   @override
@@ -65,6 +73,24 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ),
               const SizedBox(height: 16),
 
+              TextFormField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  labelText: "Email",
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Informe seu email";
+                  }
+                  final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                  if (!emailRegex.hasMatch(value)) {
+                    return "Email inválido";
+                  }
+                  return null;
+                },
+              ),
+
               const SizedBox(height: 24),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -76,6 +102,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     ref.read(userProfileProvider.notifier).saveUserProfile(
                       UserProfile(
                         name: _nameController.text,
+                        email: _emailController.text,
                         photoPath: _photoPath ?? 'assets/images/default_avatar.png',
                       ),
                     );
