@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:app_cultivo/screens/tabs.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:app_cultivo/screens/login_page.dart';
+import 'package:app_cultivo/screens/cadastro.dart';
+import 'package:app_cultivo/screens/login.dart';
 
 void main() {
   runApp(
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/': (context) => const TabsScreen(),
+        '/cadastro': (context) => const CadastroPage(),
         '/login': (context) => const LoginPage(),
       },
       initialRoute: '/',

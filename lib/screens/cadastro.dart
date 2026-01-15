@@ -5,14 +5,14 @@ import 'package:app_cultivo/models/user_profile.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
-class LoginPage extends ConsumerStatefulWidget {
-  const LoginPage({super.key});
+class CadastroPage extends ConsumerStatefulWidget {
+  const CadastroPage({super.key});
 
   @override
-  ConsumerState<LoginPage> createState() => _LoginPageState();
+  ConsumerState<CadastroPage> createState() => _CadastroPageState();
 }
 
-class _LoginPageState extends ConsumerState<LoginPage> {
+class _CadastroPageState extends ConsumerState<CadastroPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -44,6 +44,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -51,7 +52,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Login"),
+        title: const Text("Cadastro"),
         backgroundColor: const Color(0xFF8aae5c),
       ),
       body: Padding(

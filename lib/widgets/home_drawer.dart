@@ -133,6 +133,25 @@ class HomeDrawer extends ConsumerWidget {
                         Navigator.pushNamed(context, '/login');
                       },
                     ),
+                    const SizedBox(height: 16),
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(50),
+                        backgroundColor: const Color(0xff8aae5c),
+                      ),
+                      icon: const Icon(Icons.login, color: Colors.white),
+                      label: const Text(
+                        'Cadastro',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/cadastro');
+                      },
+                    ),
                   const SizedBox(height: 8),
                   if (userProfile != null)
                     ElevatedButton.icon(
