@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "464469685896",
+    "project_id": "appcutivo",
+    "storage_bucket": "appcutivo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:464469685896:android:a15924453c38a4c1b4113d",
+        "android_client_info": {
+          "package_name": "com.example.app_cultivo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxBlEHo9x-xfsm8WyVxrKqtPJ-inS6HwA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

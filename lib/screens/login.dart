@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_cultivo/providers/user_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -85,6 +86,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
               TextButton(
                 onPressed: () {
+                  Navigator.pushNamed(context, '/cadastro');
                 },
                 child: const Text("Não tem uma conta? Cadastre-se",
                     style: TextStyle(color: Color(0xFF8aae5c))
@@ -97,14 +99,29 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     );
   }
 
-  void _handleLogin() {
-    final user = ref.read(userProfileProvider);
+  void _handleLogin() async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
 
-    if (user != null && user.email == _emailController.text && user.password == _passwordController.text) {
+      ref.read(userProfileProvider.notifier).loadUserProfile();
+
       Navigator.pushReplacementNamed(context, '/home');
-    } else {
+    } on FirebaseAuthException catch (e) {
+      String mensagemErro;
+      if (e.code == 'user-not-found') {
+        mensagemErro = "Usuário não encontrado.";
+      } else if (e.code == 'wrong-password') {
+        mensagemErro = "Senha incorreta.";
+      } else {
+        mensagemErro = "Erro: ${e.message}";
+      }
+
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Email ou senha incorretos")),
+        SnackBar(content: Text(mensagemErro)),
       );
     }
   }

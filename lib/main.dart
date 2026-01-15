@@ -3,12 +3,17 @@ import 'package:app_cultivo/screens/tabs.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_cultivo/screens/cadastro.dart';
 import 'package:app_cultivo/screens/login.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
-  runApp(
-    // Envolve o aplicativo com ProviderScope para habilitar o Riverpod
-    const ProviderScope(child: MyApp())
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 // o widget raiz do aplicativo

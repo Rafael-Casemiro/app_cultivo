@@ -4,6 +4,7 @@ import 'package:app_cultivo/providers/user_provider.dart';
 import 'package:app_cultivo/models/user_profile.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CadastroPage extends ConsumerStatefulWidget {
   const CadastroPage({super.key});
@@ -150,21 +151,46 @@ class _CadastroPageState extends ConsumerState<CadastroPage> {
                   backgroundColor: const Color(0xFF8aae5c),
                   minimumSize: const Size.fromHeight(50),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    ref.read(userProfileProvider.notifier).saveUserProfile(
-                      UserProfile(
-                        name: _nameController.text,
-                        email: _emailController.text,
-                        password: _passwordController.text,
-                        photoPath: _photoPath ?? 'assets/images/default_avatar.png',
-                      ),
-                    );
-                    Navigator.pop(context);
+                    try {
+                      UserCredential userCredential = await FirebaseAuth.instance
+                          .createUserWithEmailAndPassword(
+                        email: _emailController.text.trim(),
+                        password: _passwordController.text.trim(),
+                      );
+
+                      ref.read(userProfileProvider.notifier).saveUserProfile(
+                        UserProfile(
+                          name: _nameController.text,
+                          email: _emailController.text,
+                          photoPath: _photoPath ?? 'assets/images/default_avatar.png',
+                        ),
+                      );
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Usuário cadastrado com sucesso!")),
+                      );
+
+                      Navigator.pop(context);
+                    } on FirebaseAuthException catch (e) {
+                      String mensagemErro;
+                      if (e.code == 'email-already-in-use') {
+                        mensagemErro = "Esse email já está em uso.";
+                      } else if (e.code == 'weak-password') {
+                        mensagemErro = "A senha é muito fraca.";
+                      } else {
+                        mensagemErro = "Erro: ${e.message}";
+                      }
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(mensagemErro)),
+                      );
+                    }
                   }
                 },
                 child: const Text(
-                  "Entrar",
+                  "Cadastrar",
                   style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
               ),

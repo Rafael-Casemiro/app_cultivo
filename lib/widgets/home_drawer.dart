@@ -3,6 +3,7 @@ import 'package:app_cultivo/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:app_cultivo/data/students_data.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeDrawer extends ConsumerWidget {
   const HomeDrawer({super.key});
@@ -168,8 +169,11 @@ class HomeDrawer extends ConsumerWidget {
                           color: Colors.white,
                         ),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
+                        await FirebaseAuth.instance.signOut();
                         ref.read(userProfileProvider.notifier).clearUserProfile();
+
+                        Navigator.pushReplacementNamed(context, '/login');
                       },
                     ),
                 ],
