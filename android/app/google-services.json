@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "464469685896",
-    "project_id": "appcutivo",
-    "storage_bucket": "appcutivo.firebasestorage.app"
+    "project_number": "137933371469",
+    "project_id": "agropedia-a2732",
+    "storage_bucket": "agropedia-a2732.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:464469685896:android:a15924453c38a4c1b4113d",
+        "mobilesdk_app_id": "1:137933371469:android:7f2e2b4f03e5c6c8b78404",
         "android_client_info": {
           "package_name": "com.example.app_cultivo"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAxBlEHo9x-xfsm8WyVxrKqtPJ-inS6HwA"
+          "current_key": "AIzaSyCXfkshvWdkJszSzkn2t8oOm7uk_dgeWcU"
         }
       ],
       "services": {
