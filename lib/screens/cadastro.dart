@@ -56,145 +56,147 @@ class _CadastroPageState extends ConsumerState<CadastroPage> {
         title: const Text("Cadastro"),
         backgroundColor: const Color(0xFF8aae5c),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              CircleAvatar(
-                radius: 40,
-                backgroundImage: _photoPath != null
-                    ? FileImage(File(_photoPath!))
-                    : const AssetImage('assets/images/default_avatar.png') as ImageProvider,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton.icon(
-                    icon: const Icon(Icons.photo_library),
-                    label: const Text("Galeria"),
-                    onPressed: () => _pickImage(ImageSource.gallery),
-                  ),
-                  const SizedBox(width: 10),
-                  TextButton.icon(
-                    icon: const Icon(Icons.camera_alt),
-                    label: const Text("Câmera"),
-                    onPressed: () => _pickImage(ImageSource.camera),
-                  ),
-                ],
-              ),
-
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: "Nome",
-                  border: OutlineInputBorder(),
-                  prefixIcon: const Icon(Icons.person)
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 40,
+                  backgroundImage: _photoPath != null
+                      ? FileImage(File(_photoPath!))
+                      : const AssetImage('assets/images/default_avatar.png') as ImageProvider,
                 ),
-                validator: (value) =>
-                value == null || value.isEmpty ? "Informe seu nome" : null,
-              ),
-              const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton.icon(
+                      icon: const Icon(Icons.photo_library),
+                      label: const Text("Galeria"),
+                      onPressed: () => _pickImage(ImageSource.gallery),
+                    ),
+                    const SizedBox(width: 10),
+                    TextButton.icon(
+                      icon: const Icon(Icons.camera_alt),
+                      label: const Text("Câmera"),
+                      onPressed: () => _pickImage(ImageSource.camera),
+                    ),
+                  ],
+                ),
 
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: "Email",
-                  border: OutlineInputBorder(),
-                  prefixIcon: const Icon(Icons.email),
+                TextFormField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(
+                    labelText: "Nome",
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.person)
+                  ),
+                  validator: (value) =>
+                  value == null || value.isEmpty ? "Informe seu nome" : null,
+                ),
+                const SizedBox(height: 16),
+
+                TextFormField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
+                    labelText: "Email",
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.email),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Informe seu email";
+                    }
+                    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                    if (!emailRegex.hasMatch(value)) {
+                      return "Email inválido";
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                TextFormField(
+                controller: _passwordController,
+                obscureText: _obscureText,
+                decoration: InputDecoration(
+                  labelText: "Senha",
+                  border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.lock),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscureText ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return "Informe seu email";
-                  }
-                  final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-                  if (!emailRegex.hasMatch(value)) {
-                    return "Email inválido";
+                    return "Informe sua senha";
+                  } else if (value.length < 6) {
+                    return "A senha deve ter pelo menos 6 caracteres";
                   }
                   return null;
                 },
               ),
-              const SizedBox(height: 16),
 
-              TextFormField(
-              controller: _passwordController,
-              obscureText: _obscureText,
-              decoration: InputDecoration(
-                labelText: "Senha",
-                border: const OutlineInputBorder(),
-                prefixIcon: const Icon(Icons.lock),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _obscureText ? Icons.visibility : Icons.visibility_off,
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF8aae5c),
+                    minimumSize: const Size.fromHeight(50),
                   ),
-                  onPressed: () {
-                    setState(() {
-                      _obscureText = !_obscureText;
-                    });
-                  },
-                ),
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "Informe sua senha";
-                } else if (value.length < 6) {
-                  return "A senha deve ter pelo menos 6 caracteres";
-                }
-                return null;
-              },
-            ),
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      try {
+                        UserCredential userCredential = await FirebaseAuth.instance
+                            .createUserWithEmailAndPassword(
+                          email: _emailController.text.trim(),
+                          password: _passwordController.text.trim(),
+                        );
 
-              const SizedBox(height: 24),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF8aae5c),
-                  minimumSize: const Size.fromHeight(50),
-                ),
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    try {
-                      UserCredential userCredential = await FirebaseAuth.instance
-                          .createUserWithEmailAndPassword(
-                        email: _emailController.text.trim(),
-                        password: _passwordController.text.trim(),
-                      );
+                        ref.read(userProfileProvider.notifier).saveUserProfile(
+                          UserProfile(
+                            name: _nameController.text,
+                            email: _emailController.text,
+                            photoPath: _photoPath ?? 'assets/images/default_avatar.png',
+                          ),
+                        );
 
-                      ref.read(userProfileProvider.notifier).saveUserProfile(
-                        UserProfile(
-                          name: _nameController.text,
-                          email: _emailController.text,
-                          photoPath: _photoPath ?? 'assets/images/default_avatar.png',
-                        ),
-                      );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Usuário cadastrado com sucesso!")),
+                        );
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Usuário cadastrado com sucesso!")),
-                      );
+                        Navigator.pop(context);
+                      } on FirebaseAuthException catch (e) {
+                        String mensagemErro;
+                        if (e.code == 'email-already-in-use') {
+                          mensagemErro = "Esse email já está em uso.";
+                        } else if (e.code == 'weak-password') {
+                          mensagemErro = "A senha é muito fraca.";
+                        } else {
+                          mensagemErro = "Erro: ${e.message}";
+                        }
 
-                      Navigator.pop(context);
-                    } on FirebaseAuthException catch (e) {
-                      String mensagemErro;
-                      if (e.code == 'email-already-in-use') {
-                        mensagemErro = "Esse email já está em uso.";
-                      } else if (e.code == 'weak-password') {
-                        mensagemErro = "A senha é muito fraca.";
-                      } else {
-                        mensagemErro = "Erro: ${e.message}";
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(mensagemErro)),
+                        );
                       }
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(mensagemErro)),
-                      );
                     }
-                  }
-                },
-                child: const Text(
-                  "Cadastrar",
-                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  },
+                  child: const Text(
+                    "Cadastrar",
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
