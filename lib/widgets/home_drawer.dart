@@ -3,6 +3,7 @@ import 'package:app_cultivo/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:app_cultivo/data/students_data.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeDrawer extends ConsumerWidget {
   const HomeDrawer({super.key});
@@ -114,24 +115,44 @@ class HomeDrawer extends ConsumerWidget {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(50),
-                      backgroundColor: const Color(0xff8aae5c),
-                    ),
-                    icon: const Icon(Icons.login, color: Colors.white),
-                    label: const Text(
-                      'Login',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                  if (userProfile == null)
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(50),
+                        backgroundColor: const Color(0xff8aae5c),
                       ),
+                      icon: const Icon(Icons.login, color: Colors.white),
+                      label: const Text(
+                        'Login',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/login');
+                      },
                     ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/login');
-                    },
-                  ),
+                    const SizedBox(height: 16),
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(50),
+                        backgroundColor: const Color(0xff8aae5c),
+                      ),
+                      icon: const Icon(Icons.login, color: Colors.white),
+                      label: const Text(
+                        'Cadastro',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/cadastro');
+                      },
+                    ),
                   const SizedBox(height: 8),
                   if (userProfile != null)
                     ElevatedButton.icon(
@@ -148,8 +169,11 @@ class HomeDrawer extends ConsumerWidget {
                           color: Colors.white,
                         ),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
+                        await FirebaseAuth.instance.signOut();
                         ref.read(userProfileProvider.notifier).clearUserProfile();
+
+                        Navigator.pushReplacementNamed(context, '/login');
                       },
                     ),
                 ],

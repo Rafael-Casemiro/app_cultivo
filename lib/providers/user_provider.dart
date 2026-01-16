@@ -1,7 +1,7 @@
-import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app_cultivo/models/user_profile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UserProfileNotifier extends StateNotifier<UserProfile?> {
   UserProfileNotifier() : super(null) {
@@ -9,28 +9,42 @@ class UserProfileNotifier extends StateNotifier<UserProfile?> {
   }
 
   Future<void> _loadUserProfile() async {
-    final prefs = await SharedPreferences.getInstance();
-    final name = prefs.getString('user_name');
-    final email = prefs.getString('user_email');
-    final photo = prefs.getString('user_photo');
-    if (name != null && email != null && photo != null) {
-      state = UserProfile(name: name, email: email, photoPath: photo);
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      if (doc.exists) {
+        final data = doc.data()!;
+        state = UserProfile(
+          name: data['name'],
+          email: data['email'],
+          photoPath: data['photoPath'],
+        );
+      }
     }
   }
 
+  Future<void> loadUserProfile() async {
+    await _loadUserProfile();
+  }
+
   Future<void> saveUserProfile(UserProfile profile) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('user_name', profile.name);
-    await prefs.setString('user_email', profile.email);
-    await prefs.setString('user_photo', profile.photoPath);
-    state = profile;
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+        'name': profile.name,
+        'email': profile.email,
+        'photoPath': profile.photoPath,
+        'updatedAt': DateTime.now(),
+      });
+      state = profile;
+    }
   }
 
   Future<void> clearUserProfile() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('user_name');
-    await prefs.remove('user_email');
-    await prefs.remove('user_photo');
     state = null;
   }
 }

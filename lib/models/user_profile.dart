@@ -3,5 +3,5 @@ class UserProfile {
   final String email;
   final String photoPath;
 
-  UserProfile({required this.name, required this.photoPath, required this.email});
+  UserProfile({required this.name, required this.photoPath, required this.email,});
 }
