@@ -1,6 +1,41 @@
+import 'dart:io';
 import 'package:app_cultivo/data/data.dart';
 import 'package:app_cultivo/models/models.dart';
 import 'package:flutter/material.dart';
+
+Widget _buildImage(String? path, {double? height, double? width, BoxFit? fit}) {
+  if (path == null || path.isEmpty) {
+    return Container(
+      height: height,
+      width: width,
+      color: Colors.grey[300],
+      child: const Icon(Icons.image_not_supported, color: Colors.grey),
+    );
+  }
+
+  if (path.startsWith('assets') || path.startsWith('lib')) {
+    return Image.asset(
+      path,
+      height: height,
+      width: width,
+      fit: fit ?? BoxFit.cover,
+    );
+  }
+
+  return Image.file(
+    File(path),
+    height: height,
+    width: width,
+    fit: fit ?? BoxFit.cover,
+    errorBuilder: (ctx, _, __) => Container(
+      height: height,
+      width: width,
+      color: Colors.grey,
+      child: const Icon(Icons.broken_image),
+    ),
+  );
+}
+
 
 class CardWidget extends StatelessWidget {
   const CardWidget({
@@ -28,8 +63,8 @@ class CardWidget extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(20.0),
-                child: Image.asset(
-                  plant.imagePath!,
+                child: _buildImage( 
+                  plant.imagePath,
                   height: 120,
                   width: 120,
                   fit: BoxFit.cover,
@@ -54,13 +89,12 @@ class CardWidget extends StatelessWidget {
               )
             ],
           ),
-        )
+        ),
       ),
     );
   }
 }
 
-// Configuração do widget de GridView
 class CardWidgetGrid extends StatelessWidget {
   const CardWidgetGrid({
     super.key,
@@ -79,7 +113,7 @@ class CardWidgetGrid extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 3/4,
+        childAspectRatio: 3 / 4,
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
       ),
@@ -96,8 +130,8 @@ class CardWidgetGrid extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Expanded(
-                  child: Image.asset(
-                    plant.imagePath!,
+                  child: _buildImage(
+                    plant.imagePath,
                     fit: BoxFit.cover,
                   ),
                 ),

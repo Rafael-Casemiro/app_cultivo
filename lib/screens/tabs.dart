@@ -1,12 +1,12 @@
 // Tela de abas principais do aplicativo
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:app_cultivo/data/data.dart';
 import 'package:app_cultivo/screens/plants.dart';
+import 'package:app_cultivo/screens/plants_register.dart';
 import 'package:app_cultivo/providers/favorites_providers.dart';
 import 'package:app_cultivo/providers/display_mode_provider.dart';
+import 'package:app_cultivo/providers/plants_provider.dart';
 import 'package:app_cultivo/widgets/home_drawer.dart';
-
 
 // É utilizado ConsumerStatefulWidget para ter acesso ao 'ref' (Riverpod)
 // e também manter o estado local da aba selecionada (Stateful).
@@ -22,11 +22,10 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   // 0 = Tela Inicial, 1 = Tela de Favoritos.
   int _selectedPageIndex = 0;
 
-
   // Função para exibir uma mensagem temporária (SnackBar) na tela
   void _showInfoMessage(String message) {
     ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context,).showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
 
   // Função para alterar a aba selecionada
@@ -36,32 +35,41 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     });
   }
 
+  // Função para abrir a tela de cadastro
+  void _openCadastroScreen() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) => const CadastroScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // ref.watch: "Escuta" os providers. Se a lista de favoritos ou o modo de visualização mudar,
     // o método build é executado novamente para atualizar a tela.
     final favoritePlants = ref.watch(favoritePlantsProvider);
     final ativarGridView = ref.watch(displayModeProvider);
+    
+    final allPlants = ref.watch(plantsProvider); 
 
     // Define qual página será exibida com base na aba selecionada
     Widget activePage = Plants(
       // Lista de plantas a serem exibidas depende da aba selecionada
-      plants: _selectedPageIndex == 0 ? availablePlants : favoritePlants,
-
+      plants: _selectedPageIndex == 0 ? allPlants : favoritePlants,
       onToggleFavorite: (plant) {
         // ref.read: Usado para executar uma ação sem ficar "ouvindo" mudanças.
         ref.read(favoritePlantsProvider.notifier).togglePlantFavoriteStatus(plant);
-
         // Verifica se a planta ainda está na lista para decidir a mensagem
         final becameFavorite = ref.read(favoritePlantsProvider).contains(plant);
-        _showInfoMessage(becameFavorite? "Planta Adicionada" : "Planta Removida");
+        _showInfoMessage(becameFavorite ? "Planta Adicionada" : "Planta Removida");
       },
-      ativarGridView: ativarGridView, // Passa a preferência de grade/lista para a tela filha
+      ativarGridView: ativarGridView,
     );
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Plantas"),
+        title: const Text("Plantas"),
         backgroundColor: Theme.of(context).colorScheme.primary,
         centerTitle: true,
         // Botão de alternância de modo de visualização
@@ -76,12 +84,19 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
           )
         ],
       ),
+      drawer: const HomeDrawer(),
+      body: activePage,
       
-      drawer: const HomeDrawer(), // Adiciona o menu lateral (Hambúrger)
-      body: activePage, // O corpo da tela é o widget 'activePage' configurado acima
+      floatingActionButton: _selectedPageIndex == 0 
+          ? FloatingActionButton(
+              onPressed: _openCadastroScreen,
+              child: const Icon(Icons.add),
+            )
+          : null,
+
       bottomNavigationBar: BottomNavigationBar(
-        onTap: _selectPage, // Chama a função para alterar a aba ao tocar
-        currentIndex: _selectedPageIndex, // Destaca o ícone da aba selecionada
+        onTap: _selectPage,
+        currentIndex: _selectedPageIndex,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
