@@ -15,6 +15,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscureText = true;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -29,6 +30,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       appBar: AppBar(
         title: const Text("Entrar"),
         backgroundColor: const Color(0xFF8aae5c),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, '/');
+          },
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
@@ -107,22 +114,22 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         password: _passwordController.text.trim(),
       );
 
-      ref.read(userProfileProvider.notifier).loadUserProfile();
+      await ref.read(userProfileProvider.notifier).loadUserProfile();
 
-      Navigator.pushReplacementNamed(context, '/home');
-    } on FirebaseAuthException catch (e) {
-      String mensagemErro;
-      if (e.code == 'user-not-found') {
-        mensagemErro = "Usuário não encontrado.";
-      } else if (e.code == 'wrong-password') {
-        mensagemErro = "Senha incorreta.";
-      } else {
-        mensagemErro = "Erro: ${e.message}";
-      }
+      if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(mensagemErro)),
+        const SnackBar(
+          content: Text("Login realizado com sucesso! Bem-vindo(a)."),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 2),
+        ),
       );
+
+      Navigator.pushReplacementNamed(context, '/');
+
+    } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
     }
   }
 }

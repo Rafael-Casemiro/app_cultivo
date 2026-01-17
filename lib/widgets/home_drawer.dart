@@ -115,7 +115,7 @@ class HomeDrawer extends ConsumerWidget {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  if (userProfile == null)
+                  if (userProfile == null) ...[
                     ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size.fromHeight(50),
@@ -124,36 +124,24 @@ class HomeDrawer extends ConsumerWidget {
                       icon: const Icon(Icons.login, color: Colors.white),
                       label: const Text(
                         'Login',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                       ),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/login');
-                      },
+                      onPressed: () => Navigator.pushNamed(context, '/login'),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 10),
                     ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size.fromHeight(50),
                         backgroundColor: const Color(0xff8aae5c),
                       ),
-                      icon: const Icon(Icons.login, color: Colors.white),
+                      icon: const Icon(Icons.person_add, color: Colors.white),
                       label: const Text(
                         'Cadastro',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                       ),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/cadastro');
-                      },
+                      onPressed: () => Navigator.pushNamed(context, '/cadastro'),
                     ),
-                  const SizedBox(height: 8),
+                  ],
                   if (userProfile != null)
                     ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
@@ -163,17 +151,11 @@ class HomeDrawer extends ConsumerWidget {
                       icon: const Icon(Icons.logout, color: Colors.white),
                       label: const Text(
                         'Sair',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                       ),
                       onPressed: () async {
                         await FirebaseAuth.instance.signOut();
                         ref.read(userProfileProvider.notifier).clearUserProfile();
-
-                        Navigator.pushReplacementNamed(context, '/login');
                       },
                     ),
                 ],

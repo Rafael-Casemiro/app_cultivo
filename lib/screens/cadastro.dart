@@ -21,6 +21,7 @@ class _CadastroPageState extends ConsumerState<CadastroPage> {
 
   String? _photoPath;
   bool _obscureText = true;
+  bool _isLoading = false;
 
   Future<void> _pickImage(ImageSource source) async {
     final picker = ImagePicker();
@@ -152,8 +153,10 @@ class _CadastroPageState extends ConsumerState<CadastroPage> {
                     backgroundColor: const Color(0xFF8aae5c),
                     minimumSize: const Size.fromHeight(50),
                   ),
-                  onPressed: () async {
+                  onPressed: _isLoading ? null : () async {
                     if (_formKey.currentState!.validate()) {
+                      setState(() => _isLoading = true);
+
                       try {
                         UserCredential userCredential = await FirebaseAuth.instance
                             .createUserWithEmailAndPassword(
@@ -161,38 +164,36 @@ class _CadastroPageState extends ConsumerState<CadastroPage> {
                           password: _passwordController.text.trim(),
                         );
 
-                        ref.read(userProfileProvider.notifier).saveUserProfile(
+                        await ref.read(userProfileProvider.notifier).saveUserProfile(
                           UserProfile(
-                            name: _nameController.text,
-                            email: _emailController.text,
+                            name: _nameController.text.trim(),
+                            email: _emailController.text.trim(),
                             photoPath: _photoPath ?? 'assets/images/default_avatar.png',
                           ),
                         );
 
+                        if (!mounted) return;
+
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Usuário cadastrado com sucesso!")),
+                          const SnackBar(
+                            content: Text("Conta criada com sucesso! Bem-vindo(a)."),
+                            backgroundColor: Colors.green,
+                            duration: Duration(seconds: 2),
+                          ),
                         );
 
-                        Navigator.pop(context);
+                        Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+
                       } on FirebaseAuthException catch (e) {
-                        String mensagemErro;
-                        if (e.code == 'email-already-in-use') {
-                          mensagemErro = "Esse email já está em uso.";
-                        } else if (e.code == 'weak-password') {
-                          mensagemErro = "A senha é muito fraca.";
-                        } else {
-                          mensagemErro = "Erro: ${e.message}";
-                        }
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(mensagemErro)),
-                        );
+                        if (!mounted) return;
+                      } finally {
+                        if (mounted) setState(() => _isLoading = false); // Para o loading
                       }
                     }
                   },
-                  child: const Text(
-                    "Cadastrar",
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  child: _isLoading
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : const Text("Cadastrar", style: TextStyle(fontSize: 18, color: Colors.white)
                   ),
                 ),
               ],

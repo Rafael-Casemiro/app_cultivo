@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
-// import 'firebase_options.dart'; // Pode comentar ou apagar esta linha se quiser
+import 'firebase_options.dart';
 
 // Seus imports
 import 'package:app_cultivo/screens/tabs.dart';
@@ -13,7 +13,9 @@ void main() async {
 
   try {
     if (Firebase.apps.isEmpty) {
-      await Firebase.initializeApp(); 
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
     }
   } catch (e) {
     debugPrint("Firebase já inicializado ou erro ignorável: $e");
