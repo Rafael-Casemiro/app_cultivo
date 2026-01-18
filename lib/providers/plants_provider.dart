@@ -4,10 +4,9 @@ import 'package:app_cultivo/models/models.dart';
 import 'package:app_cultivo/data/data.dart'; 
 
 class PlantsNotifier extends StateNotifier<List<Plant>> {
-  // Inicializa a lista com os dados estáticos (availablePlants)
-  PlantsNotifier() : super(availablePlants) {
+  PlantsNotifier() : super([]) {
     _loadFirebasePlants();
-  }
+}
 
   final CollectionReference plantsCollection = FirebaseFirestore.instance.collection('plants');
 
@@ -18,7 +17,7 @@ class PlantsNotifier extends StateNotifier<List<Plant>> {
         return Plant.fromMap(doc.data() as Map<String, dynamic>);
       }).toList();
 
-      state = [...availablePlants, ...firebasePlants];
+      state = firebasePlants;
     } catch (e) {
       print("Erro ao carregas plantas: $e");
     }
