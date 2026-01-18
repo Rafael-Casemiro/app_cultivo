@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-
-// Seus imports
 import 'package:app_cultivo/screens/tabs.dart';
 import 'package:app_cultivo/screens/login.dart';
 import 'package:app_cultivo/screens/cadastro.dart';
