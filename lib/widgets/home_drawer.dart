@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:app_cultivo/data/students_data.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:app_cultivo/screens/config.dart';
 
 class HomeDrawer extends ConsumerWidget {
   const HomeDrawer({super.key});
@@ -66,21 +67,29 @@ class HomeDrawer extends ConsumerWidget {
                       ),
                     ),
                     leading: const Icon(Icons.group, color: Color(0xff394834)),
-                    children: availableStudent.map((student) => ListTile(
-                      contentPadding: const EdgeInsets.only(
-                          left: 30.0, right: 16.0),
-                      leading: const Icon(Icons.person,
-                          color: Color(0xff394834)),
-                      title: Text(
-                        student.nome,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Color(0xff394834),
-                          fontFamily: 'Roboto',
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    )).toList(),
+                    children: availableStudent
+                        .map(
+                          (student) => ListTile(
+                            contentPadding: const EdgeInsets.only(
+                              left: 30.0,
+                              right: 16.0,
+                            ),
+                            leading: const Icon(
+                              Icons.person,
+                              color: Color(0xff394834),
+                            ),
+                            title: Text(
+                              student.nome,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                color: Color(0xff394834),
+                                fontFamily: 'Roboto',
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
                   ),
                   ExpansionTile(
                     title: const Text(
@@ -92,8 +101,10 @@ class HomeDrawer extends ConsumerWidget {
                         fontFamily: 'Roboto',
                       ),
                     ),
-                    leading:
-                    const Icon(Icons.description, color: Color(0xff394834)),
+                    leading: const Icon(
+                      Icons.description,
+                      color: Color(0xff394834),
+                    ),
                     children: const <Widget>[
                       ListTile(
                         title: Text(
@@ -105,8 +116,21 @@ class HomeDrawer extends ConsumerWidget {
                             fontFamily: 'Roboto',
                           ),
                         ),
-                      )
+                      ),
                     ],
+                  ),
+                  ListTile( // --> Botão que leva pra tela de configuração
+                    leading: const Icon(Icons.settings),
+                    title: const Text("Configurações", style: TextStyle(fontWeight: FontWeight.w900),),
+                    onTap: () {
+                      Navigator.pop(context); // Fecha o drawer
+                      Navigator.push( // Abre a tela de configuração
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SettingsScreen(),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -124,7 +148,11 @@ class HomeDrawer extends ConsumerWidget {
                       icon: const Icon(Icons.login, color: Colors.white),
                       label: const Text(
                         'Login',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                       onPressed: () => Navigator.pushNamed(context, '/login'),
                     ),
@@ -137,9 +165,14 @@ class HomeDrawer extends ConsumerWidget {
                       icon: const Icon(Icons.person_add, color: Colors.white),
                       label: const Text(
                         'Cadastro',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
-                      onPressed: () => Navigator.pushNamed(context, '/cadastro'),
+                      onPressed: () =>
+                          Navigator.pushNamed(context, '/cadastro'),
                     ),
                   ],
                   if (userProfile != null)
@@ -151,11 +184,17 @@ class HomeDrawer extends ConsumerWidget {
                       icon: const Icon(Icons.logout, color: Colors.white),
                       label: const Text(
                         'Sair',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                       onPressed: () async {
                         await FirebaseAuth.instance.signOut();
-                        ref.read(userProfileProvider.notifier).clearUserProfile();
+                        ref
+                            .read(userProfileProvider.notifier)
+                            .clearUserProfile();
                       },
                     ),
                 ],

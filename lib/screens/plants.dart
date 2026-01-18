@@ -70,6 +70,13 @@ class Plants extends StatelessWidget {
             ),
           ),
         );
+      } else {
+        // Carrega em formato gridview
+        content = CardWidgetGrid(
+          color: Theme.of(context).colorScheme.secondaryContainer,
+          plants: plants,
+          onSelectPlant: (plant) => _selectPlant(context, plant),
+        );
       }
     }
 
