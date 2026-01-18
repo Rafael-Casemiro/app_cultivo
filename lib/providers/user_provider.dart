@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_cultivo/models/user_profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,6 +23,7 @@ class UserProfileNotifier extends StateNotifier<UserProfile?> {
           name: data['name'],
           email: data['email'],
           photoPath: data['photoPath'],
+          ativarGridView: data['ativarGridView'] ?? false,
         );
       }
     }
@@ -38,8 +40,9 @@ class UserProfileNotifier extends StateNotifier<UserProfile?> {
         'name': profile.name,
         'email': profile.email,
         'photoPath': profile.photoPath,
+        'ativarGridView': profile.ativarGridView,
         'updatedAt': DateTime.now(),
-      });
+      }, SetOptions(merge: true)); // <-- Isso evita problemas de apagamento de dados em chamadas do Firebase ||| NÃO APAGAR
       state = profile;
     }
   }
@@ -47,8 +50,31 @@ class UserProfileNotifier extends StateNotifier<UserProfile?> {
   Future<void> clearUserProfile() async {
     state = null;
   }
+
+  // Função de atualização da tela por usuário
+  // Ela permite que a tela (grid ou list) seja salva no perfil e não localmente
+  Future<void> atualizarTela(bool ativarGridView) async {
+    // Pega a instancia do usuário
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null && state != null) {
+      // Atualiza o tipo de visualização no firebase
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).update(
+        {'ativarGridView': ativarGridView},
+      );
+
+      // Atualiza o estado local
+      state = UserProfile(
+        name: state!.name,
+        photoPath: state!.photoPath,
+        email: state!.email,
+        ativarGridView: ativarGridView,
+      );
+    }
+  }
 }
 
 final userProfileProvider =
-StateNotifierProvider<UserProfileNotifier, UserProfile?>(
-        (ref) => UserProfileNotifier());
+    StateNotifierProvider<UserProfileNotifier, UserProfile?>(
+      (ref) => UserProfileNotifier(),
+    );

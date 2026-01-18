@@ -4,9 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_cultivo/screens/plants.dart';
 import 'package:app_cultivo/screens/plants_register.dart';
 import 'package:app_cultivo/providers/favorites_providers.dart';
-import 'package:app_cultivo/providers/display_mode_provider.dart';
 import 'package:app_cultivo/providers/plants_provider.dart';
 import 'package:app_cultivo/widgets/home_drawer.dart';
+import 'package:app_cultivo/providers/user_provider.dart';
 
 // É utilizado ConsumerStatefulWidget para ter acesso ao 'ref' (Riverpod)
 // e também manter o estado local da aba selecionada (Stateful).
@@ -49,9 +49,9 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     // ref.watch: "Escuta" os providers. Se a lista de favoritos ou o modo de visualização mudar,
     // o método build é executado novamente para atualizar a tela.
     final favoritePlants = ref.watch(favoritePlantsProvider);
-    final ativarGridView = ref.watch(displayModeProvider);
-    
-    final allPlants = ref.watch(plantsProvider); 
+    final allPlants = ref.watch(plantsProvider);
+    final userProfile = ref.watch(userProfileProvider);
+    final ativarGridView = userProfile?.ativarGridView ?? false;
 
     // Define qual página será exibida com base na aba selecionada
     Widget activePage = Plants(
@@ -72,17 +72,6 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
         title: const Text("Plantas"),
         backgroundColor: Theme.of(context).colorScheme.primary,
         centerTitle: true,
-        // Botão de alternância de modo de visualização
-        actions: [
-          IconButton(
-            // Muda o ícone baseado no modo atual
-            icon: Icon(ativarGridView ? Icons.view_list : Icons.grid_view),
-            onPressed: () {
-              // Chama o notifier para inverter o valor booleano do modo de exibição
-              ref.read(displayModeProvider.notifier).toggleDisplayMode();
-            }
-          )
-        ],
       ),
       drawer: const HomeDrawer(),
       body: activePage,
