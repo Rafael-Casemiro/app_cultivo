@@ -1,8 +1,8 @@
-import 'dart:io'; 
+import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart'; 
+import 'package:image_picker/image_picker.dart';
 import 'package:app_cultivo/providers/plants_provider.dart';
 import 'package:app_cultivo/models/models.dart';
 
@@ -34,17 +34,12 @@ class _CadastroScreenState extends ConsumerState<CadastroScreen> {
     super.dispose();
   }
 
-  
-  
   Future<void> _pickImage(ImageSource source) async {
     final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(
-      source: source,
-      maxWidth: 600,
-    );
+    final pickedImage = await picker.pickImage(source: source, maxWidth: 600);
 
     if (pickedImage == null) {
-      return; 
+      return;
     }
 
     setState(() {
@@ -73,7 +68,7 @@ class _CadastroScreenState extends ConsumerState<CadastroScreen> {
                 leading: const Icon(Icons.photo_library),
                 title: const Text('Escolher da Galeria'),
                 onTap: () {
-                  Navigator.of(ctx).pop(); 
+                  Navigator.of(ctx).pop();
                   _pickImage(ImageSource.gallery);
                 },
               ),
@@ -86,20 +81,22 @@ class _CadastroScreenState extends ConsumerState<CadastroScreen> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      
+      final currentPlants = ref.read(plantsProvider);
+      final nextIdNumber = currentPlants.length + 1;
+
       final newPlant = Plant(
-        id: Random().nextDouble().toString(),
+        id: 'p$nextIdNumber',
         name: _nameController.text,
         sciname: _sciNameController.text,
         season: _seasonController.text,
         description: _descriptionController.text,
         instructions: _instructionsController.text,
         isFavorite: false,
-        imagePath: _selectedImage?.path, 
+        imagePath: _selectedImage?.path,
       );
 
       ref.read(plantsProvider.notifier).addPlant(newPlant);
-      
+
       Navigator.of(context).pop();
     }
   }
@@ -147,7 +144,7 @@ class _CadastroScreenState extends ConsumerState<CadastroScreen> {
                     TextButton(
                       onPressed: _showOpcoesFoto,
                       child: const Text('Trocar Imagem'),
-                    )
+                    ),
                 ],
               ),
               const SizedBox(height: 20),
@@ -184,8 +181,9 @@ class _CadastroScreenState extends ConsumerState<CadastroScreen> {
                 controller: _instructionsController,
                 decoration: const InputDecoration(labelText: 'Instruções'),
                 maxLines: 3,
-                validator: (value) =>
-                    value == null || value.isEmpty ? 'Insira instruções.' : null,
+                validator: (value) => value == null || value.isEmpty
+                    ? 'Insira instruções.'
+                    : null,
               ),
               const SizedBox(height: 20),
               ElevatedButton(
@@ -193,7 +191,10 @@ class _CadastroScreenState extends ConsumerState<CadastroScreen> {
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: const Text('Salvar Planta', style: TextStyle(fontSize: 18)),
+                child: const Text(
+                  'Salvar Planta',
+                  style: TextStyle(fontSize: 18),
+                ),
               ),
             ],
           ),
