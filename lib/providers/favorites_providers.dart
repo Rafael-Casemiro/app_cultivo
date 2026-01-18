@@ -1,32 +1,69 @@
-// Arquivo para gerenciar o estado das plantas favoritas usando Riverpod
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_cultivo/models/models.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:app_cultivo/providers/plants_provider.dart';
 
-/// Classe que gerencia o estado da lista de favoritos.
-/// Estende StateNotifier, onde o estado é uma Lista de objetos Plant (`List<Plant>`).
 class FavoritesPlantsNotifier extends StateNotifier<List<Plant>> {
-  // Construtor que inicializa o estado com uma lista vazia
-  FavoritesPlantsNotifier() : super([]);
+  final Ref ref;
 
-  // Método para alternar o status de favorito de uma planta
+  FavoritesPlantsNotifier(this.ref) : super([]) {
+    loadFavorites();
+  }
+
+  Future<void> loadFavorites() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    // Busca os IDs do favoritos do usuário no Firebase
+    final doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
+
+    if (doc.exists && doc.data()!.containsKey('favoritePlants')) {
+      final List<dynamic> favoriteIds = doc.data()!['favoritePlants'];
+
+      // Seleciona as plantas
+      final allPlants = ref.read(plantsProvider);
+
+      // Guarda as plantas que têm o ID salvo na lista de favoritos
+      state = allPlants
+          .where((plant) => favoriteIds.contains(plant.id))
+          .toList();
+    }
+  }
+
+  Future<void> _updateFirebase(List<Plant> newFavorites) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    final plantIds = newFavorites.map((plant) => plant.id).toList();
+
+    await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+      'favoritePlants': plantIds,
+    }, SetOptions(merge: true));
+  }
+
   void togglePlantFavoriteStatus(Plant plant) {
+    // Compara IDs e verifica se já é favorito
+    final isFavorite = state.any((p) => p.id == plant.id);
 
-    // Verifica se a planta já está na lista de favoritos
-    final plantIsFavorite = state.contains(plant);
-
-    // Se estiver na lista de favoritos a planta é removida, caso contrário é adicionada
-    if (plantIsFavorite) {
-      // Cria uma nova lista filtrando todas as plantas, EXCETO a que tem o ID igual ao da planta atual.
+    if (isFavorite) {
       state = state.where((p) => p.id != plant.id).toList();
     } else {
-       // Cria uma nova lista contendo todos os itens antigos (...state) + a nova planta.
       state = [...state, plant];
     }
+
+    // Atualiza no Firebase
+    _updateFirebase(state);
   }
 }
 
-/// Provider que expõe o estado gerenciado por FavoritesPlantsNotifier.
 final favoritePlantsProvider =
     StateNotifierProvider<FavoritesPlantsNotifier, List<Plant>>((ref) {
-      return FavoritesPlantsNotifier();
+      // Recria a lista de favoritos, co adicionar novas plantas
+      ref.watch(plantsProvider);
+
+      return FavoritesPlantsNotifier(ref);
     });
